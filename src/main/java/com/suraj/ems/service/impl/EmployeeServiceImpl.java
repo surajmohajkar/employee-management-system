@@ -2,7 +2,10 @@ package com.suraj.ems.service.impl;
 
 import java.util.List;
 import org.springframework.stereotype.Service;
+import com.suraj.ems.dto.EmployeeRequestDTO;
+import com.suraj.ems.dto.EmployeeResponseDTO;
 import com.suraj.ems.entity.Employee;
+import com.suraj.ems.mapper.EmployeeMapper;
 import com.suraj.ems.repository.EmployeeRepository;
 import com.suraj.ems.service.EmployeeService;
 
@@ -15,39 +18,51 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
 
     @Override
-    public Employee saveEmployee(Employee employee) {
-        return employeeRepository.save(employee);
+    public EmployeeResponseDTO saveEmployee(EmployeeRequestDTO requestDTO) {
+
+        Employee employee = EmployeeMapper.toEntity(requestDTO);
+        Employee savedEmployee = employeeRepository.save(employee);
+        return EmployeeMapper.toResponseDTO(savedEmployee);
     }
 
     @Override
-    public List<Employee> getAllEmployees() {
-        return employeeRepository.findAll();
+    public List<EmployeeResponseDTO> getAllEmployees() {
+
+        List<Employee> employees = employeeRepository.findAll();
+        return employees.stream().map(EmployeeMapper::toResponseDTO).toList();
     }
 
     @Override
-    public Employee getEmployeeById(Long employeeId) {
-        return employeeRepository.findById(employeeId)
-                .orElseThrow(() -> new RuntimeException("Employee not found with ID : " + employeeId));
+    public EmployeeResponseDTO getEmployeeById(Long employeeId) {
+
+        Employee employee = employeeRepository.findById(employeeId)
+                .orElseThrow(() ->new RuntimeException("Employee not found with ID : " + employeeId));
+        return EmployeeMapper.toResponseDTO(employee);
     }
 
     @Override
-    public Employee updateEmployee(Long employeeId, Employee employee) {
-        Employee existingEmployee = getEmployeeById(employeeId);
-        existingEmployee.setFirstName(employee.getFirstName());
-        existingEmployee.setLastName(employee.getLastName());
-        existingEmployee.setEmail(employee.getEmail());
-        existingEmployee.setPhoneNumber(employee.getPhoneNumber());
-        existingEmployee.setDepartment(employee.getDepartment());
-        existingEmployee.setDesignation(employee.getDesignation());
-        existingEmployee.setSalary(employee.getSalary());
-        existingEmployee.setJoiningDate(employee.getJoiningDate());
-        existingEmployee.setStatus(employee.getStatus());
-        return employeeRepository.save(existingEmployee);
+    public EmployeeResponseDTO updateEmployee(Long employeeId,EmployeeRequestDTO requestDTO) {
+
+        Employee existingEmployee = employeeRepository.findById(employeeId)
+                .orElseThrow(() ->new RuntimeException("Employee not found with ID : " + employeeId));
+
+        existingEmployee.setFirstName(requestDTO.getFirstName());
+        existingEmployee.setLastName(requestDTO.getLastName());
+        existingEmployee.setEmail(requestDTO.getEmail());
+        existingEmployee.setPhoneNumber(requestDTO.getPhonenNumber());
+        existingEmployee.setDepartment(requestDTO.getDepartment());
+        existingEmployee.setDesignation(requestDTO.getDesignation());
+        existingEmployee.setSalary(requestDTO.getSalary());
+        existingEmployee.setJoiningDate(requestDTO.getJoiningDate());
+        existingEmployee.setStatus(requestDTO.getStatus());
+        Employee updatedEmployee = employeeRepository.save(existingEmployee);
+        return EmployeeMapper.toResponseDTO(updatedEmployee);
     }
 
     @Override
     public void deleteEmployee(Long employeeId) {
-        Employee employee = getEmployeeById(employeeId);
+        Employee employee = employeeRepository.findById(employeeId)
+                .orElseThrow(() ->new RuntimeException("Employee not found with ID : " + employeeId));
         employeeRepository.delete(employee);
     }
 }
