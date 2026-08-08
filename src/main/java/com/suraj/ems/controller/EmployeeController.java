@@ -13,7 +13,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.suraj.ems.entity.Employee;
+import com.suraj.ems.dto.EmployeeRequestDTO;
+import com.suraj.ems.dto.EmployeeResponseDTO;
 import com.suraj.ems.service.EmployeeService;
 
 @RestController
@@ -28,33 +29,33 @@ public class EmployeeController {
 	//Create Employee
 	@PostMapping
 	@ResponseStatus(HttpStatus.CREATED)
-	public Employee saveEmployee(@RequestBody Employee employee) {
-		return employeeService.saveEmployee(employee);
+	public EmployeeResponseDTO saveEmployee(@RequestBody EmployeeRequestDTO requestDTO) {
+		return employeeService.saveEmployee(requestDTO);
 	}
 	
 	//Get All Employee
 	@GetMapping
-	public List<Employee>getAllEmployees(){
+	public List<EmployeeResponseDTO>getAllEmployees(){
 		return employeeService.getAllEmployees();
 	}
 	
 	//Get Employee By ID
 	@GetMapping("/{id}")
-	public Employee getEmployeeById(@PathVariable Long id) {
+	public EmployeeResponseDTO getEmployeeById(@PathVariable Long id) {
 		return employeeService.getEmployeeById(id);
 	}
 	
 	//Update Employee
 	@PutMapping("/{id}")
-	public Employee updateEmployee(@PathVariable Long id, @RequestBody Employee employee) {
-		return employeeService.updateEmployee(id, employee);
-	}
+    public EmployeeResponseDTO updateEmployee(@PathVariable Long id,@RequestBody EmployeeRequestDTO requestDTO) {
+        return employeeService.updateEmployee(id, requestDTO);
+    }
 	
 	//Delete Employee
 	@DeleteMapping("/{id}")
-	@ResponseStatus(HttpStatus.NO_CONTENT)
-	public void deleteEmployee(@PathVariable Long id) {
-		employeeService.deleteEmployee(id);
-	}
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deleteEmployee(@PathVariable Long id) {
+        employeeService.deleteEmployee(id);
+    }
 
 }

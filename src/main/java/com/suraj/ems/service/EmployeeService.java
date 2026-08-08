@@ -2,18 +2,18 @@ package com.suraj.ems.service;
 
 import java.util.List;
 
-import com.suraj.ems.entity.Employee;
+import com.suraj.ems.dto.EmployeeRequestDTO;
+import com.suraj.ems.dto.EmployeeResponseDTO;
 
 public interface EmployeeService {
 
-    Employee saveEmployee(Employee employee);
+	EmployeeResponseDTO saveEmployee(EmployeeRequestDTO requestdto);
 
-    List<Employee> getAllEmployees();
+    List<EmployeeResponseDTO> getAllEmployees();
 
-    Employee getEmployeeById(Long employeeId);
+    EmployeeResponseDTO getEmployeeById(Long employeeId);
 
-    Employee updateEmployee(Long employeeId, Employee employee);
+    EmployeeResponseDTO updateEmployee(Long employeeId, EmployeeRequestDTO requestdto);
 
     void deleteEmployee(Long employeeId);
-
 }
