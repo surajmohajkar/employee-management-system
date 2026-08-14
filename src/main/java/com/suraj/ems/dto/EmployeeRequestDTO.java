@@ -81,11 +81,11 @@ public class EmployeeRequestDTO {
 		this.email = email;
 	}
 
-	public String getPhonenNumber() {
+	public String getPhoneNumber() {
 		return phoneNumber;
 	}
 
-	public void setPhonenNumber(String phonenNumber) {
+	public void setPhoneNumber(String phonenNumber) {
 		this.phoneNumber = phonenNumber;
 	}
 

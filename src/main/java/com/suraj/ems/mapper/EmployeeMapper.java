@@ -14,7 +14,7 @@ public class EmployeeMapper {
 		employee.setFirstName(dto.getFirstName());
 		employee.setLastName(dto.getLastName());
 		employee.setEmail(dto.getEmail());
-		employee.setPhoneNumber(dto.getPhonenNumber());
+		employee.setPhoneNumber(dto.getPhoneNumber());
 		employee.setDepartment(dto.getDepartment());
 		employee.setDesignation(dto.getDesignation());
 		employee.setSalary(dto.getSalary());

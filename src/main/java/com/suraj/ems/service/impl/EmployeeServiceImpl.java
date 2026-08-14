@@ -1,10 +1,13 @@
 package com.suraj.ems.service.impl;
 
 import java.util.List;
+
 import org.springframework.stereotype.Service;
+
 import com.suraj.ems.dto.EmployeeRequestDTO;
 import com.suraj.ems.dto.EmployeeResponseDTO;
 import com.suraj.ems.entity.Employee;
+import com.suraj.ems.exception.EmployeeNotFoundException;
 import com.suraj.ems.mapper.EmployeeMapper;
 import com.suraj.ems.repository.EmployeeRepository;
 import com.suraj.ems.service.EmployeeService;
@@ -36,7 +39,7 @@ public class EmployeeServiceImpl implements EmployeeService {
     public EmployeeResponseDTO getEmployeeById(Long employeeId) {
 
         Employee employee = employeeRepository.findById(employeeId)
-                .orElseThrow(() ->new RuntimeException("Employee not found with ID : " + employeeId));
+                .orElseThrow(() ->new EmployeeNotFoundException("Employee not found with ID : " + employeeId));
         return EmployeeMapper.toResponseDTO(employee);
     }
 
@@ -44,12 +47,12 @@ public class EmployeeServiceImpl implements EmployeeService {
     public EmployeeResponseDTO updateEmployee(Long employeeId,EmployeeRequestDTO requestDTO) {
 
         Employee existingEmployee = employeeRepository.findById(employeeId)
-                .orElseThrow(() ->new RuntimeException("Employee not found with ID : " + employeeId));
+                .orElseThrow(() ->new EmployeeNotFoundException("Employee not found with ID : " + employeeId));
 
         existingEmployee.setFirstName(requestDTO.getFirstName());
         existingEmployee.setLastName(requestDTO.getLastName());
         existingEmployee.setEmail(requestDTO.getEmail());
-        existingEmployee.setPhoneNumber(requestDTO.getPhonenNumber());
+        existingEmployee.setPhoneNumber(requestDTO.getPhoneNumber());
         existingEmployee.setDepartment(requestDTO.getDepartment());
         existingEmployee.setDesignation(requestDTO.getDesignation());
         existingEmployee.setSalary(requestDTO.getSalary());
@@ -62,7 +65,7 @@ public class EmployeeServiceImpl implements EmployeeService {
     @Override
     public void deleteEmployee(Long employeeId) {
         Employee employee = employeeRepository.findById(employeeId)
-                .orElseThrow(() ->new RuntimeException("Employee not found with ID : " + employeeId));
+                .orElseThrow(() ->new EmployeeNotFoundException("Employee not found with ID : " + employeeId));
         employeeRepository.delete(employee);
     }
 }
