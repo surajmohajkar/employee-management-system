@@ -2,19 +2,44 @@ package com.suraj.ems.dto;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
-
+import jakarta.validation.constraints.DecimalMin;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.PastOrPresent;
 import com.suraj.ems.enums.EmployeeStatus;
 
 public class EmployeeRequestDTO {
+	@NotBlank(message = "First name is required")
 	private String firstName;
+
+	@NotBlank(message = "Last name is required")
 	private String lastName;
+
+	@NotBlank(message = "Email is required")
+	@Email(message = "Please provide a valid email address")
 	private String email;
-	private String phonenNumber;
+
+	@NotBlank(message = "Phone number is required")
+	private String phoneNumber;
+
+	@NotBlank(message = "Department is required")
 	private String department;
+
+	@NotBlank(message = "Designation is required")
 	private String designation;
+
+	@NotNull(message = "Salary is required")
+	@DecimalMin(value = "0.0", inclusive = false, message = "Salary must be greater than 0")
 	private BigDecimal salary;
+
+	@NotNull(message = "Joining date is required")
+	@PastOrPresent(message = "Joining date cannot be in the future")
 	private LocalDate joiningDate;
+
+	@NotNull(message = "Employee status is required")
 	private EmployeeStatus status;
+	
 	public EmployeeRequestDTO() {
 		
 	}
@@ -24,7 +49,7 @@ public class EmployeeRequestDTO {
 		this.firstName = firstName;
 		this.lastName = lastName;
 		this.email = email;
-		this.phonenNumber = phoneNumber;
+		this.phoneNumber = phoneNumber;
 		this.department = department;
 		this.designation = designation;
 		this.salary = salary;
@@ -57,11 +82,11 @@ public class EmployeeRequestDTO {
 	}
 
 	public String getPhonenNumber() {
-		return phonenNumber;
+		return phoneNumber;
 	}
 
 	public void setPhonenNumber(String phonenNumber) {
-		this.phonenNumber = phonenNumber;
+		this.phoneNumber = phonenNumber;
 	}
 
 	public String getDepartment() {
