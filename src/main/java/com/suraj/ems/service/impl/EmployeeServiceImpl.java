@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
+import com.suraj.ems.dto.EmployeePatchDTO;
 import com.suraj.ems.dto.EmployeeRequestDTO;
 import com.suraj.ems.dto.EmployeeResponseDTO;
 import com.suraj.ems.entity.Employee;
@@ -67,5 +68,41 @@ public class EmployeeServiceImpl implements EmployeeService {
         Employee employee = employeeRepository.findById(employeeId)
                 .orElseThrow(() ->new EmployeeNotFoundException("Employee not found with ID : " + employeeId));
         employeeRepository.delete(employee);
+    }
+    
+    @Override
+    public EmployeeResponseDTO patchEmployee(Long employeeId, EmployeePatchDTO patchDTO) {
+    	Employee existingEmployee = employeeRepository.findById(employeeId).orElseThrow(()-> new EmployeeNotFoundException("Employee not found with ID : "+ employeeId));
+    	
+    	if(patchDTO.getFirstName() != null) {
+    		existingEmployee.setFirstName(patchDTO.getFirstName());
+    	}
+    	 if (patchDTO.getLastName() != null) {
+    	        existingEmployee.setLastName(patchDTO.getLastName());
+    	    }
+    	 if (patchDTO.getEmail() != null) {
+    	        existingEmployee.setEmail(patchDTO.getEmail());
+    	    }
+    	 if (patchDTO.getPhoneNumber() != null) {
+    	        existingEmployee.setPhoneNumber(patchDTO.getPhoneNumber());
+    	    }
+    	 if (patchDTO.getDepartment() != null) {
+    	        existingEmployee.setDepartment(patchDTO.getDepartment());
+    	    }
+    	 if (patchDTO.getDesignation() != null) {
+    	        existingEmployee.setDesignation(patchDTO.getDesignation());
+    	    }
+    	 if (patchDTO.getSalary() != null) {
+    	        existingEmployee.setSalary(patchDTO.getSalary());
+    	    }
+    	 if (patchDTO.getJoiningDate() != null) {
+    	        existingEmployee.setJoiningDate(patchDTO.getJoiningDate());
+    	    }
+    	 if (patchDTO.getStatus() != null) {
+    	        existingEmployee.setStatus(patchDTO.getStatus());
+    	    }
+    	 Employee updatedEmployee = employeeRepository.save(existingEmployee);
+
+    	 return EmployeeMapper.toResponseDTO(updatedEmployee);
     }
 }
