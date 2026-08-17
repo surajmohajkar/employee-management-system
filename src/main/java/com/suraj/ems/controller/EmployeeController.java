@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -68,6 +69,14 @@ public class EmployeeController {
 	@PatchMapping("/{id}")
 	public EmployeeResponseDTO patchEmployee(@PathVariable Long id,@RequestBody EmployeePatchDTO patchDTO) {
 	    return employeeService.patchEmployee(id, patchDTO);
+	}
+	
+	//Search Employee By Department
+	@GetMapping("/search")
+	public Page<EmployeeResponseDTO> searchEmployeesByDepartment(
+	        @RequestParam String department,@PageableDefault(size = 10, sort = "employeeId") Pageable pageable) {
+
+	    return employeeService.searchEmployeesByDepartment(department,pageable);
 	}
 
 }
