@@ -2,6 +2,9 @@ package com.suraj.ems.service;
 
 import java.util.List;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+
 import com.suraj.ems.dto.EmployeePatchDTO;
 import com.suraj.ems.dto.EmployeeRequestDTO;
 import com.suraj.ems.dto.EmployeeResponseDTO;
@@ -11,6 +14,8 @@ public interface EmployeeService {
 	EmployeeResponseDTO saveEmployee(EmployeeRequestDTO requestdto);
 
     List<EmployeeResponseDTO> getAllEmployees();
+    
+    Page<EmployeeResponseDTO>getAllEmployees(Pageable pageable);
 
     EmployeeResponseDTO getEmployeeById(Long employeeId);
 

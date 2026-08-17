@@ -2,6 +2,8 @@ package com.suraj.ems.service.impl;
 
 import java.util.List;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.suraj.ems.dto.EmployeePatchDTO;
@@ -36,6 +38,15 @@ public class EmployeeServiceImpl implements EmployeeService {
         return employees.stream().map(EmployeeMapper::toResponseDTO).toList();
     }
 
+    @Override
+    public Page<EmployeeResponseDTO> getAllEmployees(Pageable pageable) {
+
+        Page<Employee> employeePage =
+                employeeRepository.findAll(pageable);
+
+        return employeePage.map(EmployeeMapper::toResponseDTO);
+    }
+    
     @Override
     public EmployeeResponseDTO getEmployeeById(Long employeeId) {
 

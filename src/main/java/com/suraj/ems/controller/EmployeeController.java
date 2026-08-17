@@ -1,6 +1,10 @@
 package com.suraj.ems.controller;
 
 import java.util.List;
+
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -37,8 +41,8 @@ public class EmployeeController {
 	
 	//Get All Employee
 	@GetMapping
-	public List<EmployeeResponseDTO>getAllEmployees(){
-		return employeeService.getAllEmployees();
+	public Page<EmployeeResponseDTO> getAllEmployees(@PageableDefault(size = 10, sort = "employeeId") Pageable pageable) {
+	    return employeeService.getAllEmployees(pageable);
 	}
 	
 	//Get Employee By ID
