@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.suraj.ems.dto.EmployeePatchDTO;
 import com.suraj.ems.dto.EmployeeRequestDTO;
 import com.suraj.ems.dto.EmployeeResponseDTO;
+import com.suraj.ems.dto.PromotionRequestDTO;
 import com.suraj.ems.service.EmployeeService;
 import jakarta.validation.Valid;
 
@@ -77,6 +78,13 @@ public class EmployeeController {
 	        @RequestParam String department,@PageableDefault(size = 10, sort = "employeeId") Pageable pageable) {
 
 	    return employeeService.searchEmployeesByDepartment(department,pageable);
+	}
+	
+	//Promote Employee
+	@PostMapping("/{id}/promotion")
+	public EmployeeResponseDTO promoteEmployee(@PathVariable Long id,@Valid @RequestBody PromotionRequestDTO requestDTO) {
+
+	    return employeeService.promoteEmployee(id, requestDTO);
 	}
 
 }

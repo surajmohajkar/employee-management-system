@@ -5,10 +5,12 @@ import java.util.List;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.suraj.ems.dto.EmployeePatchDTO;
 import com.suraj.ems.dto.EmployeeRequestDTO;
 import com.suraj.ems.dto.EmployeeResponseDTO;
+import com.suraj.ems.dto.PromotionRequestDTO;
 import com.suraj.ems.entity.Employee;
 import com.suraj.ems.exception.EmployeeNotFoundException;
 import com.suraj.ems.mapper.EmployeeMapper;
@@ -121,6 +123,19 @@ public class EmployeeServiceImpl implements EmployeeService {
     public Page<EmployeeResponseDTO> searchEmployeesByDepartment(String department,Pageable pageable) {
         Page<Employee> employeePage =employeeRepository.findByDepartmentIgnoreCase(department,pageable);
         return employeePage.map(EmployeeMapper::toResponseDTO);
+    }
+    
+    @Override
+    @Transactional
+    public EmployeeResponseDTO promoteEmployee(Long employeeId,PromotionRequestDTO requestDTO) {
+
+        Employee employee = employeeRepository.findById(employeeId)
+                .orElseThrow(() ->new EmployeeNotFoundException("Employee not found with ID : " + employeeId));
+
+        employee.setDesignation(requestDTO.getDesignation());
+        employee.setSalary(requestDTO.getSalary());
+        Employee updatedEmployee = employeeRepository.save(employee);
+        return EmployeeMapper.toResponseDTO(updatedEmployee);
     }
     
 }
