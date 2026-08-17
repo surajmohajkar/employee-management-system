@@ -16,6 +16,8 @@ public interface EmployeeService {
     List<EmployeeResponseDTO> getAllEmployees();
     
     Page<EmployeeResponseDTO>getAllEmployees(Pageable pageable);
+    
+    Page<EmployeeResponseDTO> searchEmployeesByDepartment(String department,Pageable pageable);
 
     EmployeeResponseDTO getEmployeeById(Long employeeId);
 

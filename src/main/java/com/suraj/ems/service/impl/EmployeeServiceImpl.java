@@ -116,4 +116,11 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     	 return EmployeeMapper.toResponseDTO(updatedEmployee);
     }
+    
+    @Override
+    public Page<EmployeeResponseDTO> searchEmployeesByDepartment(String department,Pageable pageable) {
+        Page<Employee> employeePage =employeeRepository.findByDepartmentIgnoreCase(department,pageable);
+        return employeePage.map(EmployeeMapper::toResponseDTO);
+    }
+    
 }
