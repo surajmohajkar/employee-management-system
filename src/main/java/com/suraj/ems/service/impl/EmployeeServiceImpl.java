@@ -6,7 +6,11 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
 
+import com.suraj.ems.entity.EmployeeSalaryHistory;
+import com.suraj.ems.repository.EmployeeSalaryHistoryRepository;
 import com.suraj.ems.dto.EmployeePatchDTO;
 import com.suraj.ems.dto.EmployeeRequestDTO;
 import com.suraj.ems.dto.EmployeeResponseDTO;
@@ -15,14 +19,17 @@ import com.suraj.ems.entity.Employee;
 import com.suraj.ems.exception.EmployeeNotFoundException;
 import com.suraj.ems.mapper.EmployeeMapper;
 import com.suraj.ems.repository.EmployeeRepository;
+import com.suraj.ems.repository.EmployeeSalaryHistoryRepository;
 import com.suraj.ems.service.EmployeeService;
 
 @Service
 public class EmployeeServiceImpl implements EmployeeService {
 
     private final EmployeeRepository employeeRepository;
-    public EmployeeServiceImpl(EmployeeRepository employeeRepository) {
+    private final EmployeeSalaryHistoryRepository salaryHistoryRepository;
+    public EmployeeServiceImpl(EmployeeRepository employeeRepository, EmployeeSalaryHistoryRepository salaryHistoryRepository) {
         this.employeeRepository = employeeRepository;
+        this.salaryHistoryRepository = salaryHistoryRepository;
     }
 
     @Override
@@ -132,10 +139,24 @@ public class EmployeeServiceImpl implements EmployeeService {
         Employee employee = employeeRepository.findById(employeeId)
                 .orElseThrow(() ->new EmployeeNotFoundException("Employee not found with ID : " + employeeId));
 
-        employee.setDesignation(requestDTO.getDesignation());
+        BigDecimal oldSalary = employee.getSalary();
+        String oldDesignation = employee.getDesignation();
+
         employee.setSalary(requestDTO.getSalary());
-        Employee updatedEmployee = employeeRepository.save(employee);
-        return EmployeeMapper.toResponseDTO(updatedEmployee);
+        employee.setDesignation(requestDTO.getDesignation());
+
+        EmployeeSalaryHistory history = new EmployeeSalaryHistory();
+
+        history.setEmployee(employee);
+        history.setOldSalary(oldSalary);
+        history.setNewSalary(requestDTO.getSalary());
+        history.setOldDesignation(oldDesignation);
+        history.setNewDesignation(requestDTO.getDesignation());
+        history.setChangedAt(LocalDateTime.now());
+
+        salaryHistoryRepository.save(history);
+        
+        return EmployeeMapper.toResponseDTO(employee);
     }
     
 }
