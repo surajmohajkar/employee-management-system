@@ -43,7 +43,8 @@ public class EmployeeController {
 	
 	//Get All Employee
 	@GetMapping
-	public Page<EmployeeResponseDTO> getAllEmployees(@PageableDefault(size = 10, sort = "employeeId") Pageable pageable) {
+	public Page<EmployeeResponseDTO> getAllEmployees
+	(@PageableDefault(size = 10, sort = "employeeId") Pageable pageable) {
 	    return employeeService.getAllEmployees(pageable);
 	}
 	
