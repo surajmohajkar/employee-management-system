@@ -5,7 +5,7 @@ import java.time.LocalDateTime;
 
 public class EmployeeSalaryHistoryResponseDTO {
 
-	private Long historyId;
+    private Long historyId;
     private Long employeeId;
     private String employeeName;
 
@@ -40,67 +40,67 @@ public class EmployeeSalaryHistoryResponseDTO {
         this.changedAt = changedAt;
     }
 
-	public Long getHistoryId() {
-		return historyId;
-	}
+    public Long getHistoryId() {
+        return historyId;
+    }
 
-	public void setHistoryId(Long historyId) {
-		this.historyId = historyId;
-	}
+    public void setHistoryId(Long historyId) {
+        this.historyId = historyId;
+    }
 
-	public Long getEmployeeId() {
-		return employeeId;
-	}
+    public Long getEmployeeId() {
+        return employeeId;
+    }
 
-	public void setEmployeeId(Long employeeId) {
-		this.employeeId = employeeId;
-	}
+    public void setEmployeeId(Long employeeId) {
+        this.employeeId = employeeId;
+    }
 
-	public String getEmployeeName() {
-		return employeeName;
-	}
+    public String getEmployeeName() {
+        return employeeName;
+    }
 
-	public void setEmployeeName(String employeeName) {
-		this.employeeName = employeeName;
-	}
+    public void setEmployeeName(String employeeName) {
+        this.employeeName = employeeName;
+    }
 
-	public BigDecimal getOldSalary() {
-		return oldSalary;
-	}
+    public BigDecimal getOldSalary() {
+        return oldSalary;
+    }
 
-	public void setOldSalary(BigDecimal oldSalary) {
-		this.oldSalary = oldSalary;
-	}
+    public void setOldSalary(BigDecimal oldSalary) {
+        this.oldSalary = oldSalary;
+    }
 
-	public BigDecimal getNewSalary() {
-		return newSalary;
-	}
+    public BigDecimal getNewSalary() {
+        return newSalary;
+    }
 
-	public void setNewSalary(BigDecimal newSalary) {
-		this.newSalary = newSalary;
-	}
+    public void setNewSalary(BigDecimal newSalary) {
+        this.newSalary = newSalary;
+    }
 
-	public String getOldDesignation() {
-		return oldDesignation;
-	}
+    public String getOldDesignation() {
+        return oldDesignation;
+    }
 
-	public void setOldDesignation(String oldDesignation) {
-		this.oldDesignation = oldDesignation;
-	}
+    public void setOldDesignation(String oldDesignation) {
+        this.oldDesignation = oldDesignation;
+    }
 
-	public String getNewDesignation() {
-		return newDesignation;
-	}
+    public String getNewDesignation() {
+        return newDesignation;
+    }
 
-	public void setNewDesignation(String newDesignation) {
-		this.newDesignation = newDesignation;
-	}
+    public void setNewDesignation(String newDesignation) {
+        this.newDesignation = newDesignation;
+    }
 
-	public LocalDateTime getChangedAt() {
-		return changedAt;
-	}
+    public LocalDateTime getChangedAt() {
+        return changedAt;
+    }
 
-	public void setChangedAt(LocalDateTime changedAt) {
-		this.changedAt = changedAt;
-	}    
+    public void setChangedAt(LocalDateTime changedAt) {
+        this.changedAt = changedAt;
+    }
 }

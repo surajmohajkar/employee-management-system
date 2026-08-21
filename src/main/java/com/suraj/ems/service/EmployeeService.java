@@ -8,6 +8,7 @@ import org.springframework.data.domain.Pageable;
 import com.suraj.ems.dto.EmployeePatchDTO;
 import com.suraj.ems.dto.EmployeeRequestDTO;
 import com.suraj.ems.dto.EmployeeResponseDTO;
+import com.suraj.ems.dto.EmployeeSalaryHistoryResponseDTO;
 import com.suraj.ems.dto.PromotionRequestDTO;
 
 public interface EmployeeService {
@@ -27,6 +28,8 @@ public interface EmployeeService {
     EmployeeResponseDTO patchEmployee(Long employeeId, EmployeePatchDTO patchDTO);
     
     EmployeeResponseDTO promoteEmployee(Long employeeId,PromotionRequestDTO requestDTO);
+    
+    List<EmployeeSalaryHistoryResponseDTO> getSalaryHistory(Long employeeId);
 
     void deleteEmployee(Long employeeId);
 }

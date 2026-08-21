@@ -2,6 +2,7 @@ package com.suraj.ems.controller;
 
 import java.util.List;
 
+import com.suraj.ems.dto.EmployeeSalaryHistoryResponseDTO;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
@@ -87,5 +88,11 @@ public class EmployeeController {
 
 	    return employeeService.promoteEmployee(id, requestDTO);
 	}
+	
+	@GetMapping("/{id}/salary-history")
+	public List<EmployeeSalaryHistoryResponseDTO> getSalaryHistory(
+	        @PathVariable Long id) {
 
+	    return employeeService.getSalaryHistory(id);
+	}
 }

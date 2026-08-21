@@ -14,6 +14,7 @@ import com.suraj.ems.repository.EmployeeSalaryHistoryRepository;
 import com.suraj.ems.dto.EmployeePatchDTO;
 import com.suraj.ems.dto.EmployeeRequestDTO;
 import com.suraj.ems.dto.EmployeeResponseDTO;
+import com.suraj.ems.dto.EmployeeSalaryHistoryResponseDTO;
 import com.suraj.ems.dto.PromotionRequestDTO;
 import com.suraj.ems.entity.Employee;
 import com.suraj.ems.exception.EmployeeNotFoundException;
@@ -50,8 +51,7 @@ public class EmployeeServiceImpl implements EmployeeService {
     @Override
     public Page<EmployeeResponseDTO> getAllEmployees(Pageable pageable) {
 
-        Page<Employee> employeePage =
-                employeeRepository.findAll(pageable);
+        Page<Employee> employeePage =employeeRepository.findAll(pageable);
 
         return employeePage.map(EmployeeMapper::toResponseDTO);
     }
@@ -147,16 +147,29 @@ public class EmployeeServiceImpl implements EmployeeService {
 
         EmployeeSalaryHistory history = new EmployeeSalaryHistory();
 
-        history.setEmployee(employee);
         history.setOldSalary(oldSalary);
         history.setNewSalary(requestDTO.getSalary());
         history.setOldDesignation(oldDesignation);
         history.setNewDesignation(requestDTO.getDesignation());
         history.setChangedAt(LocalDateTime.now());
-
+        employee.addSalaryHistory(history);
         salaryHistoryRepository.save(history);
         
         return EmployeeMapper.toResponseDTO(employee);
+    }
+    
+    @Override
+    @Transactional(readOnly = true)
+    public List<EmployeeSalaryHistoryResponseDTO> getSalaryHistory(Long employeeId) {
+
+        List<EmployeeSalaryHistory> histories =salaryHistoryRepository.findHistoryWithEmployee(employeeId);
+
+        return histories.stream().map(history -> {Employee employee = history.getEmployee();
+        String employeeName =employee.getFirstName()+ " "+ employee.getLastName();
+
+                    return new EmployeeSalaryHistoryResponseDTO(history.getHistoryId(),employee.getEmployeeId(),
+                            employeeName,history.getOldSalary(),history.getNewSalary(),history.getOldDesignation(),
+                            history.getNewDesignation(),history.getChangedAt());}).toList();
     }
     
 }
