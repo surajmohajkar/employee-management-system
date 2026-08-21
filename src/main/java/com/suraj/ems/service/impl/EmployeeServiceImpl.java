@@ -15,6 +15,7 @@ import com.suraj.ems.dto.EmployeePatchDTO;
 import com.suraj.ems.dto.EmployeeRequestDTO;
 import com.suraj.ems.dto.EmployeeResponseDTO;
 import com.suraj.ems.dto.EmployeeSalaryHistoryResponseDTO;
+import com.suraj.ems.dto.EmployeeUpdateRequestDTO;
 import com.suraj.ems.dto.PromotionRequestDTO;
 import com.suraj.ems.entity.Employee;
 import com.suraj.ems.exception.EmployeeNotFoundException;
@@ -28,6 +29,7 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     private final EmployeeRepository employeeRepository;
     private final EmployeeSalaryHistoryRepository salaryHistoryRepository;
+    
     public EmployeeServiceImpl(EmployeeRepository employeeRepository, EmployeeSalaryHistoryRepository salaryHistoryRepository) {
         this.employeeRepository = employeeRepository;
         this.salaryHistoryRepository = salaryHistoryRepository;
@@ -65,22 +67,26 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
 
     @Override
-    public EmployeeResponseDTO updateEmployee(Long employeeId,EmployeeRequestDTO requestDTO) {
+    @Transactional
+    public EmployeeResponseDTO updateEmployee(Long employeeId,EmployeeUpdateRequestDTO requestDTO) {
 
-        Employee existingEmployee = employeeRepository.findById(employeeId)
-                .orElseThrow(() ->new EmployeeNotFoundException("Employee not found with ID : " + employeeId));
+        Employee employee = employeeRepository.findById(employeeId)
+                .orElseThrow(() ->new EmployeeNotFoundException("Employee not found with ID : "+ employeeId));
 
-        existingEmployee.setFirstName(requestDTO.getFirstName());
-        existingEmployee.setLastName(requestDTO.getLastName());
-        existingEmployee.setEmail(requestDTO.getEmail());
-        existingEmployee.setPhoneNumber(requestDTO.getPhoneNumber());
-        existingEmployee.setDepartment(requestDTO.getDepartment());
-        existingEmployee.setDesignation(requestDTO.getDesignation());
-        existingEmployee.setSalary(requestDTO.getSalary());
-        existingEmployee.setJoiningDate(requestDTO.getJoiningDate());
-        existingEmployee.setStatus(requestDTO.getStatus());
-        Employee updatedEmployee = employeeRepository.save(existingEmployee);
-        return EmployeeMapper.toResponseDTO(updatedEmployee);
+        if (!employee.getVersion().equals(requestDTO.getVersion())) {
+
+            throw new RuntimeException(
+                    "Employee was modified by another user. "+ "Please refresh and try again.");
+        }
+
+        employee.setFirstName(requestDTO.getFirstName());
+        employee.setLastName(requestDTO.getLastName());
+        employee.setPhoneNumber(requestDTO.getPhoneNumber());
+        employee.setDepartment(requestDTO.getDepartment());
+        employee.setDesignation(requestDTO.getDesignation());
+        employee.setSalary(requestDTO.getSalary());
+
+        return EmployeeMapper.toResponseDTO(employee);
     }
 
     @Override

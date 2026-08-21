@@ -16,11 +16,12 @@ public class EmployeeResponseDTO {
 	private BigDecimal salary;
 	private LocalDate joiningDate;
 	private EmployeeStatus status;
+	private Long version;
 	public EmployeeResponseDTO() {
 		
 	}
 	public EmployeeResponseDTO(Long employeeId, String firstName,String lastName, String email, String phoneNumber,
-			String department, String designation, BigDecimal salary, LocalDate joiningDate, EmployeeStatus status) {
+			String department, String designation, BigDecimal salary, LocalDate joiningDate, EmployeeStatus status, Long version) {
 		this.employeeId = employeeId;
 		this.firstName = firstName;
 		this.lastName = lastName;
@@ -31,6 +32,7 @@ public class EmployeeResponseDTO {
 		this.salary = salary;
 		this.joiningDate = joiningDate;
 		this.status = status;
+		this.version = version;
 	}
 	public Long getEmployeeId() {
 		return employeeId;
@@ -91,6 +93,14 @@ public class EmployeeResponseDTO {
 	}
 	public void setStatus(EmployeeStatus status) {
 		this.status = status;
+	}
+	
+	public Long getVersion() {
+	    return version;
+	}
+
+	public void setVersion(Long version) {
+	    this.version = version;
 	}
 	
 }
