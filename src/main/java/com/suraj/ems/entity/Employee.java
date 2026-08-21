@@ -4,7 +4,11 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 
 import com.suraj.ems.enums.EmployeeStatus;
+import java.util.ArrayList;
+import java.util.List;
 
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -59,6 +63,22 @@ public class Employee {
     @Enumerated(EnumType.STRING)
     @Column(name = "status", nullable = false)
     private EmployeeStatus status;
+    
+    @OneToMany(
+            mappedBy = "employee",
+            cascade = CascadeType.ALL,
+            orphanRemoval = true
+    )
+    private List<EmployeeSalaryHistory> salaryHistories = new ArrayList<>();
+    
+    public void addSalaryHistory(EmployeeSalaryHistory history) {
+        salaryHistories.add(history);
+        history.setEmployee(this);
+    }
+    public void removeSalaryHistory(EmployeeSalaryHistory history) {
+        salaryHistories.remove(history);
+        history.setEmployee(null);
+    }
 
 	public Long getEmployeeId() {
 		return employeeId;
@@ -139,6 +159,12 @@ public class Employee {
 	public void setStatus(EmployeeStatus status) {
 		this.status = status;
 	}
+	
+	public List<EmployeeSalaryHistory> getSalaryHistories() {
+	    return salaryHistories;
+	}
 
-
+	public void setSalaryHistories(List<EmployeeSalaryHistory> salaryHistories) {
+	    this.salaryHistories = salaryHistories;
+	}
 }
