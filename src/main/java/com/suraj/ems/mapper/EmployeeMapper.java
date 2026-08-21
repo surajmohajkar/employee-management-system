@@ -37,6 +37,7 @@ public class EmployeeMapper {
 		dto.setSalary(employee.getSalary());
 		dto.setJoiningDate(employee.getJoiningDate());
 		dto.setStatus(employee.getStatus());
+		dto.setVersion(employee.getVersion());
 		
 		return dto;
 	}

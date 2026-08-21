@@ -9,6 +9,7 @@ import com.suraj.ems.dto.EmployeePatchDTO;
 import com.suraj.ems.dto.EmployeeRequestDTO;
 import com.suraj.ems.dto.EmployeeResponseDTO;
 import com.suraj.ems.dto.EmployeeSalaryHistoryResponseDTO;
+import com.suraj.ems.dto.EmployeeUpdateRequestDTO;
 import com.suraj.ems.dto.PromotionRequestDTO;
 
 public interface EmployeeService {
@@ -23,7 +24,7 @@ public interface EmployeeService {
 
     EmployeeResponseDTO getEmployeeById(Long employeeId);
 
-    EmployeeResponseDTO updateEmployee(Long employeeId, EmployeeRequestDTO requestdto);
+    EmployeeResponseDTO updateEmployee(Long employeeId,EmployeeUpdateRequestDTO requestDTO);
     
     EmployeeResponseDTO patchEmployee(Long employeeId, EmployeePatchDTO patchDTO);
     

@@ -3,6 +3,8 @@ package com.suraj.ems.controller;
 import java.util.List;
 
 import com.suraj.ems.dto.EmployeeSalaryHistoryResponseDTO;
+import com.suraj.ems.dto.EmployeeUpdateRequestDTO;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
@@ -57,9 +59,10 @@ public class EmployeeController {
 	
 	//Update Employee
 	@PutMapping("/{id}")
-    public EmployeeResponseDTO updateEmployee(@PathVariable Long id, @Valid @RequestBody EmployeeRequestDTO requestDTO) {
-        return employeeService.updateEmployee(id, requestDTO);
-    }
+	public EmployeeResponseDTO updateEmployee(@PathVariable Long id,@Valid @RequestBody EmployeeUpdateRequestDTO requestDTO) {
+
+	    return employeeService.updateEmployee(id, requestDTO);
+	}
 	
 	//Delete Employee
 	@DeleteMapping("/{id}")

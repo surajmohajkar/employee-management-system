@@ -10,6 +10,7 @@ import java.util.List;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Column;
+import jakarta.persistence.Version;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -35,6 +36,10 @@ public class Employee {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "employee_id")
     private Long employeeId;
+	
+	@Version
+	@Column(nullable = false)
+	private Long version;
 
     @Column(name = "first_name", nullable = false, length = 100)
     private String firstName;
@@ -86,6 +91,14 @@ public class Employee {
 
 	public void setEmployeeId(Long employeeId) {
 		this.employeeId = employeeId;
+	}
+	
+	public Long getVersion() {
+	    return version;
+	}
+
+	public void setVersion(Long version) {
+	    this.version = version;
 	}
 
 	public String getFirstName() {
