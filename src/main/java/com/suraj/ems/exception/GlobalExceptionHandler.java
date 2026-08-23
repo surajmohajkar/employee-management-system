@@ -48,4 +48,23 @@ public class GlobalExceptionHandler {
 
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
     }
+    
+    @ExceptionHandler(EmployeeVersionConflictException.class)
+    public ResponseEntity<ApiErrorResponse> handleEmployeeVersionConflict(
+            EmployeeVersionConflictException exception,WebRequest request) {
+
+        ApiErrorResponse response = new ApiErrorResponse();
+
+        response.setTimestamp(LocalDateTime.now());
+
+        response.setStatus(HttpStatus.CONFLICT.value());
+
+        response.setError("Employee Version Conflict");
+
+        response.setMessage(exception.getMessage());
+
+        response.setPath(request.getDescription(false).replace("uri=", ""));
+
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(response);
+    }
 }

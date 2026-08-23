@@ -23,6 +23,7 @@ import com.suraj.ems.mapper.EmployeeMapper;
 import com.suraj.ems.repository.EmployeeRepository;
 import com.suraj.ems.repository.EmployeeSalaryHistoryRepository;
 import com.suraj.ems.service.EmployeeService;
+import com.suraj.ems.exception.EmployeeVersionConflictException;
 
 @Service
 public class EmployeeServiceImpl implements EmployeeService {
@@ -75,7 +76,7 @@ public class EmployeeServiceImpl implements EmployeeService {
 
         if (!employee.getVersion().equals(requestDTO.getVersion())) {
 
-            throw new RuntimeException(
+            throw new EmployeeVersionConflictException(
                     "Employee was modified by another user. "+ "Please refresh and try again.");
         }
 
