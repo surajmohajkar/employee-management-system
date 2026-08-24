@@ -21,7 +21,6 @@ import com.suraj.ems.entity.Employee;
 import com.suraj.ems.exception.EmployeeNotFoundException;
 import com.suraj.ems.mapper.EmployeeMapper;
 import com.suraj.ems.repository.EmployeeRepository;
-import com.suraj.ems.repository.EmployeeSalaryHistoryRepository;
 import com.suraj.ems.service.EmployeeService;
 import com.suraj.ems.exception.EmployeeVersionConflictException;
 
@@ -98,39 +97,59 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
     
     @Override
-    public EmployeeResponseDTO patchEmployee(Long employeeId, EmployeePatchDTO patchDTO) {
-    	Employee existingEmployee = employeeRepository.findById(employeeId).orElseThrow(()-> new EmployeeNotFoundException("Employee not found with ID : "+ employeeId));
-    	
-    	if(patchDTO.getFirstName() != null) {
-    		existingEmployee.setFirstName(patchDTO.getFirstName());
-    	}
-    	 if (patchDTO.getLastName() != null) {
-    	        existingEmployee.setLastName(patchDTO.getLastName());
-    	    }
-    	 if (patchDTO.getEmail() != null) {
-    	        existingEmployee.setEmail(patchDTO.getEmail());
-    	    }
-    	 if (patchDTO.getPhoneNumber() != null) {
-    	        existingEmployee.setPhoneNumber(patchDTO.getPhoneNumber());
-    	    }
-    	 if (patchDTO.getDepartment() != null) {
-    	        existingEmployee.setDepartment(patchDTO.getDepartment());
-    	    }
-    	 if (patchDTO.getDesignation() != null) {
-    	        existingEmployee.setDesignation(patchDTO.getDesignation());
-    	    }
-    	 if (patchDTO.getSalary() != null) {
-    	        existingEmployee.setSalary(patchDTO.getSalary());
-    	    }
-    	 if (patchDTO.getJoiningDate() != null) {
-    	        existingEmployee.setJoiningDate(patchDTO.getJoiningDate());
-    	    }
-    	 if (patchDTO.getStatus() != null) {
-    	        existingEmployee.setStatus(patchDTO.getStatus());
-    	    }
-    	 Employee updatedEmployee = employeeRepository.save(existingEmployee);
+    @Transactional
+    public EmployeeResponseDTO patchEmployee(Long employeeId,EmployeePatchDTO patchDTO) {
 
-    	 return EmployeeMapper.toResponseDTO(updatedEmployee);
+        Employee existingEmployee = employeeRepository.findById(employeeId).orElseThrow(() ->
+                        new EmployeeNotFoundException("Employee not found with ID : " + employeeId));
+
+        if (patchDTO.getVersion() == null) {
+            throw new EmployeeVersionConflictException("Employee version is required for PATCH operation.");
+        }
+
+        if (!existingEmployee.getVersion().equals(patchDTO.getVersion())) {
+            throw new EmployeeVersionConflictException("Employee was modified by another user. "+ "Please refresh and try again.");
+        }
+
+        if (patchDTO.getFirstName() != null) {
+            existingEmployee.setFirstName(patchDTO.getFirstName());
+        }
+
+        if (patchDTO.getLastName() != null) {
+            existingEmployee.setLastName(patchDTO.getLastName());
+        }
+
+        if (patchDTO.getEmail() != null) {
+            existingEmployee.setEmail(patchDTO.getEmail());
+        }
+
+        if (patchDTO.getPhoneNumber() != null) {
+            existingEmployee.setPhoneNumber(patchDTO.getPhoneNumber());
+        }
+
+        if (patchDTO.getDepartment() != null) {
+            existingEmployee.setDepartment(patchDTO.getDepartment());
+        }
+
+        if (patchDTO.getDesignation() != null) {
+            existingEmployee.setDesignation(patchDTO.getDesignation());
+        }
+
+        if (patchDTO.getSalary() != null) {
+            existingEmployee.setSalary(patchDTO.getSalary());
+        }
+
+        if (patchDTO.getJoiningDate() != null) {
+            existingEmployee.setJoiningDate(patchDTO.getJoiningDate());
+        }
+
+        if (patchDTO.getStatus() != null) {
+            existingEmployee.setStatus(patchDTO.getStatus());
+        }
+
+        Employee updatedEmployee = employeeRepository.save(existingEmployee);
+
+        return EmployeeMapper.toResponseDTO(updatedEmployee);
     }
     
     @Override
