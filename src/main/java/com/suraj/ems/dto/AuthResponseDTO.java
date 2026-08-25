@@ -12,6 +12,8 @@ public class AuthResponseDTO {
 
     private boolean enabled;
 
+    private String token;
+
     public AuthResponseDTO() {
     }
 
@@ -19,12 +21,14 @@ public class AuthResponseDTO {
             Long userId,
             String username,
             Role role,
-            boolean enabled) {
+            boolean enabled,
+            String token) {
 
         this.userId = userId;
         this.username = username;
         this.role = role;
         this.enabled = enabled;
+        this.token = token;
     }
 
     public Long getUserId() {
@@ -57,5 +61,13 @@ public class AuthResponseDTO {
 
     public void setEnabled(boolean enabled) {
         this.enabled = enabled;
+    }
+
+    public String getToken() {
+        return token;
+    }
+
+    public void setToken(String token) {
+        this.token = token;
     }
 }
