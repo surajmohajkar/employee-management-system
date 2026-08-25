@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.suraj.ems.dto.AuthResponseDTO;
+import com.suraj.ems.dto.LoginRequestDTO;
 import com.suraj.ems.dto.RegisterRequestDTO;
 import com.suraj.ems.service.AuthService;
 
@@ -29,5 +30,13 @@ public class AuthController {
         AuthResponseDTO response = authService.register(requestDTO);
 
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
+    }
+    
+    @PostMapping("/login")
+    public ResponseEntity<AuthResponseDTO> login(@Valid @RequestBody LoginRequestDTO requestDTO) {
+
+        AuthResponseDTO response = authService.login(requestDTO);
+
+        return ResponseEntity.ok(response);
     }
 }
