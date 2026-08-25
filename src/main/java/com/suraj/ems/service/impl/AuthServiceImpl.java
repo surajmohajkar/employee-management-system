@@ -12,6 +12,7 @@ import com.suraj.ems.dto.RegisterRequestDTO;
 import com.suraj.ems.entity.User;
 import com.suraj.ems.enums.Role;
 import com.suraj.ems.repository.UserRepository;
+import com.suraj.ems.security.JwtService;
 import com.suraj.ems.service.AuthService;
 
 @Service
@@ -19,12 +20,15 @@ public class AuthServiceImpl implements AuthService{
 	private final UserRepository userRepository;
 	private final PasswordEncoder passwordEncoder;
 	private final AuthenticationManager authenticationManager;
+	private final JwtService jwtService;
 	
-	public AuthServiceImpl(UserRepository userRepository,PasswordEncoder passwordEncoder,AuthenticationManager authenticationManager) {
+	public AuthServiceImpl(UserRepository userRepository,PasswordEncoder passwordEncoder,
+			AuthenticationManager authenticationManager,JwtService jwtService) {
 
 	    this.userRepository = userRepository;
 	    this.passwordEncoder = passwordEncoder;
 	    this.authenticationManager = authenticationManager;
+	    this.jwtService=jwtService;
 	}
 	
 	@Override
@@ -32,14 +36,16 @@ public class AuthServiceImpl implements AuthService{
 	public AuthResponseDTO register(RegisterRequestDTO requestDTO) {
 
 	    if (userRepository.existsByUsername(requestDTO.getUsername())) {
-	        throw new IllegalArgumentException("Username already exists: " + requestDTO.getUsername());
+	        throw new IllegalArgumentException(
+	                "Username already exists: " + requestDTO.getUsername());
 	    }
 
 	    User user = new User();
 
 	    user.setUsername(requestDTO.getUsername());
 
-	    String encodedPassword = passwordEncoder.encode(requestDTO.getPassword());
+	    String encodedPassword =
+	            passwordEncoder.encode(requestDTO.getPassword());
 
 	    user.setPassword(encodedPassword);
 
@@ -49,20 +55,34 @@ public class AuthServiceImpl implements AuthService{
 
 	    User savedUser = userRepository.save(user);
 
-	    return new AuthResponseDTO(savedUser.getUserId(),
-	            savedUser.getUsername(),savedUser.getRole(),savedUser.isEnabled());
+	    return new AuthResponseDTO(
+	            savedUser.getUserId(),
+	            savedUser.getUsername(),
+	            savedUser.getRole(),
+	            savedUser.isEnabled(),
+	            null
+	    );
 	}
 	
 	@Override
 	@Transactional(readOnly = true)
 	public AuthResponseDTO login(LoginRequestDTO requestDTO) {
 
-	    authenticationManager.authenticate(
+	    var authentication = authenticationManager.authenticate(
 	            new UsernamePasswordAuthenticationToken(requestDTO.getUsername(),requestDTO.getPassword()));
 
-	    User user = userRepository.findByUsername(requestDTO.getUsername())
-	            .orElseThrow(() ->new IllegalArgumentException("User not found: " + requestDTO.getUsername()));
+	    User user = userRepository.findByUsername(requestDTO.getUsername()).orElseThrow(() ->
+	            new IllegalArgumentException("User not found: "+ requestDTO.getUsername()));
 
-	    return new AuthResponseDTO(user.getUserId(),user.getUsername(),user.getRole(),user.isEnabled());
+	    String token = jwtService.generateToken(
+	            (org.springframework.security.core.userdetails.UserDetails)authentication.getPrincipal());
+
+	    return new AuthResponseDTO(
+	            user.getUserId(),
+	            user.getUsername(),
+	            user.getRole(),
+	            user.isEnabled(),
+	            token
+	    );
 	}
 }
