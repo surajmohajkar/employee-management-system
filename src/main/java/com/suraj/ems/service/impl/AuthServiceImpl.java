@@ -78,11 +78,7 @@ public class AuthServiceImpl implements AuthService{
 	            (org.springframework.security.core.userdetails.UserDetails)authentication.getPrincipal());
 
 	    return new AuthResponseDTO(
-	            user.getUserId(),
-	            user.getUsername(),
-	            user.getRole(),
-	            user.isEnabled(),
-	            token
-	    );
+	            user.getUserId(),user.getUsername(),
+	            user.getRole(),user.isEnabled(),token);
 	}
 }
