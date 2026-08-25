@@ -8,5 +8,5 @@ import com.suraj.ems.entity.Employee;
 
 @Repository
 public interface EmployeeRepository extends JpaRepository<Employee, Long> {
-	Page<Employee>findByDepartmentIgnoreCase(String department, Pageable pageable);
+	Page<Employee>findByDepartment(String department, Pageable pageable);
 }

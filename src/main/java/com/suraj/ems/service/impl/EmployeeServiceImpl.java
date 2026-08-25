@@ -154,7 +154,9 @@ public class EmployeeServiceImpl implements EmployeeService {
     
     @Override
     public Page<EmployeeResponseDTO> searchEmployeesByDepartment(String department,Pageable pageable) {
-        Page<Employee> employeePage =employeeRepository.findByDepartmentIgnoreCase(department,pageable);
+
+        Page<Employee> employeePage =employeeRepository.findByDepartment(department,pageable);
+
         return employeePage.map(EmployeeMapper::toResponseDTO);
     }
     
@@ -197,5 +199,5 @@ public class EmployeeServiceImpl implements EmployeeService {
                             employeeName,history.getOldSalary(),history.getNewSalary(),history.getOldDesignation(),
                             history.getNewDesignation(),history.getChangedAt());}).toList();
     }
-    
+
 }
