@@ -39,15 +39,16 @@ public class JwtService {
                 .subject(userDetails.getUsername())
                 .issuedAt(issuedAt)
                 .expiration(expiration)
-                .claim("role",
+                .claim(
+                        "role",
                         userDetails.getAuthorities()
                                 .iterator()
                                 .next()
-                                .getAuthority())
+                                .getAuthority()
+                )
                 .signWith(signingKey)
                 .compact();
     }
-
     public String extractUsername(String token) {
 
         return extractAllClaims(token).getSubject();
