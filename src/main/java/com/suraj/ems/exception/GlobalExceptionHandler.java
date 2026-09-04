@@ -67,4 +67,23 @@ public class GlobalExceptionHandler {
 
         return ResponseEntity.status(HttpStatus.CONFLICT).body(response);
     }
+    
+    @ExceptionHandler(DuplicateUsernameException.class)
+    public ResponseEntity<ApiErrorResponse> handleDuplicateUsername(
+            DuplicateUsernameException exception,WebRequest request) {
+
+        ApiErrorResponse response = new ApiErrorResponse();
+
+        response.setTimestamp(LocalDateTime.now());
+
+        response.setStatus(HttpStatus.CONFLICT.value());
+
+        response.setError("Username Already Exists");
+
+        response.setMessage(exception.getMessage());
+
+        response.setPath(request.getDescription(false).replace("uri=", ""));
+
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(response);
+    }
 }
