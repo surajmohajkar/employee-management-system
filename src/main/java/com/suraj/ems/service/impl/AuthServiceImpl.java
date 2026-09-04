@@ -11,6 +11,7 @@ import com.suraj.ems.dto.LoginRequestDTO;
 import com.suraj.ems.dto.RegisterRequestDTO;
 import com.suraj.ems.entity.User;
 import com.suraj.ems.enums.Role;
+import com.suraj.ems.exception.DuplicateUsernameException;
 import com.suraj.ems.repository.UserRepository;
 import com.suraj.ems.security.JwtService;
 import com.suraj.ems.service.AuthService;
@@ -36,7 +37,7 @@ public class AuthServiceImpl implements AuthService{
 	public AuthResponseDTO register(RegisterRequestDTO requestDTO) {
 
 	    if (userRepository.existsByUsername(requestDTO.getUsername())) {
-	        throw new IllegalArgumentException(
+	        throw new DuplicateUsernameException(
 	                "Username already exists: " + requestDTO.getUsername());
 	    }
 
@@ -44,8 +45,7 @@ public class AuthServiceImpl implements AuthService{
 
 	    user.setUsername(requestDTO.getUsername());
 
-	    String encodedPassword =
-	            passwordEncoder.encode(requestDTO.getPassword());
+	    String encodedPassword =passwordEncoder.encode(requestDTO.getPassword());
 
 	    user.setPassword(encodedPassword);
 
